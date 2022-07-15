@@ -20,6 +20,7 @@ export default function App() {
   const [ appIsReady, setAppIsReady ] = useState(false);
   const [ userNumber, setUserNumber ] = useState();
   const [ gameIsOver, setGameIsOver ] = useState(true);
+  const [ guessRounds, setGuessRounds ] = useState(0);
 
   const fontsLoading = {
     'open-sans': require('./assets/fonts/OpenSans-Regular.ttf'),
@@ -59,8 +60,14 @@ function pickedNumberHandler(pickedNumber) {
   setGameIsOver(false);
 }
 
-function gameOverHandler() {
+function gameOverHandler(numberOfRounds) {
   setGameIsOver(true);
+  setGuessRounds(numberOfRounds);
+}
+
+function onStartNewGameHandler() {
+       setUserNumber(null);
+       setGuessRounds(0);
 }
 
 let screen = <StartGameScreen onPickNumber={pickedNumberHandler}/>;
@@ -70,11 +77,12 @@ if (userNumber) {
 }
 
 if (gameIsOver && userNumber) {
-  screen =<GameOverScreen />
+  screen =<GameOverScreen userNumber={userNumber} roundsNumber={guessRounds} onStartNewGame={onStartNewGameHandler} />
 }
 
 
   return (
+
   <LinearGradient colors={[Colors.primary700, Colors.accent500]} style={styles.rootScreen}   onLayout={onLayoutRootView}>
  <ImageBackground source={require('./assets/images/background.png')}
                      resizeMode="cover"
